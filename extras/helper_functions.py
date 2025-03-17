@@ -286,3 +286,30 @@ def calculate_results(y_true, y_pred):
                   "recall": model_recall,
                   "f1": model_f1}
   return model_results
+
+# Plot F1-score from dataset function
+def plot_f1_scores_from_dataframe(food_classes_col, f1_scores_col):
+    """
+    Plots F1 scores for different food classes as a horizontal bar chart.
+
+    Parameters:
+    - food_classes_col: Pandas Series or list of food class names (column from DataFrame).
+    - f1_scores_col: Pandas Series or list of corresponding F1 scores (column from DataFrame).
+    """
+    # Ensure inputs are lists for compatibility
+    food_classes = food_classes_col.tolist() if not isinstance(food_classes_col, list) else food_classes_col
+    f1_scores = f1_scores_col.tolist() if not isinstance(f1_scores_col, list) else f1_scores_col
+
+    # Sort data in descending order of F1 scores
+    sorted_data = sorted(zip(food_classes, f1_scores), key=lambda x: x[1], reverse=True)
+    sorted_food_classes, sorted_f1_scores = zip(*sorted_data)
+
+    # Plot horizontal bar chart
+    plt.figure(figsize=(8, max(6, len(sorted_food_classes) * 0.25)))  # Adjust figure size dynamically
+    plt.barh(sorted_food_classes, sorted_f1_scores, color='skyblue', height=0.5)
+    plt.xlabel('F1 Score', fontsize=12)
+    plt.ylabel('Food Classes', fontsize=12)
+    plt.title('F1 Scores of Food Classes', fontsize=14)
+    plt.gca().invert_yaxis()  # Highest score on top
+    plt.tight_layout()
+    plt.show()
